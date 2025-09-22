@@ -5,48 +5,56 @@ Bem-vindo ao seu repositório de estudos de DevOps! Este guia foi criado para te
 ## 📋 Roadmap de Estudos
 
 ### 1. Fundamentos
+
 - [ ] Conceitos básicos de DevOps
 - [ ] Cultura DevOps e colaboração
 - [ ] Metodologias ágeis e DevOps
 - [ ] Princípios de automação
 
 ### 2. Controle de Versão
+
 - [ ] Git avançado
 - [ ] GitFlow e GitHub Flow
 - [ ] Merge requests e code review
 - [ ] Git hooks e automação
 
 ### 3. Containerização
+
 - [ ] Docker fundamentals
 - [ ] Docker Compose
 - [ ] Docker best practices
 - [ ] Container registry
 
 ### 4. Orquestração
+
 - [ ] Kubernetes fundamentals
 - [ ] Pods, Services, Deployments
 - [ ] Ingress e networking
 - [ ] Helm charts
 
 ### 5. CI/CD
+
 - [ ] Jenkins
 - [ ] GitHub Actions
 - [ ] GitLab CI
 - [ ] Azure DevOps
 
 ### 6. Infraestrutura como Código
+
 - [ ] Terraform
 - [ ] Ansible
 - [ ] CloudFormation
 - [ ] Pulumi
 
 ### 7. Monitoramento e Observabilidade
+
 - [ ] Prometheus e Grafana
 - [ ] ELK Stack
 - [ ] APM tools
 - [ ] Logging strategies
 
 ### 8. Segurança
+
 - [ ] DevSecOps
 - [ ] Container security
 - [ ] Secrets management
@@ -94,4 +102,4 @@ Estudos-DevOps/
 
 **Boa sorte nos seus estudos! 🚀**
 
-*Lembre-se: DevOps é uma jornada, não um destino. Continue aprendendo e praticando!*
+_Lembre-se: DevOps é uma jornada, não um destino. Continue aprendendo e praticando!_
