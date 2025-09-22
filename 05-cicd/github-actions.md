@@ -7,15 +7,19 @@ GitHub Actions é uma plataforma de CI/CD integrada ao GitHub que permite automa
 ## 🎯 Conceitos Básicos
 
 ### Workflow
+
 Um workflow é um processo automatizado que você define no seu repositório. É composto por jobs e steps.
 
 ### Job
+
 Um job é um conjunto de steps que são executados no mesmo runner.
 
 ### Step
+
 Um step é uma tarefa individual que pode executar comandos ou usar actions.
 
 ### Action
+
 Uma action é uma unidade reutilizável de código que pode ser executada em um workflow.
 
 ## 📁 Estrutura de Arquivos
@@ -37,62 +41,66 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Run tests
-      run: npm test
-      
-    - name: Build
-      run: npm run build
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
 ```
 
 ## 🔧 Triggers (Gatilhos)
 
 ### Push e Pull Request
+
 ```yaml
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 ```
 
 ### Schedule (Cron)
+
 ```yaml
 on:
   schedule:
-    - cron: '0 2 * * *'  # Todo dia às 2h
+    - cron: "0 2 * * *" # Todo dia às 2h
 ```
 
 ### Workflow Dispatch
+
 ```yaml
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy'
+        description: "Environment to deploy"
         required: true
-        default: 'staging'
+        default: "staging"
 ```
 
 ### Webhook
+
 ```yaml
 on:
   repository_dispatch:
@@ -102,11 +110,13 @@ on:
 ## 🏃‍♂️ Runners
 
 ### GitHub-hosted Runners
+
 - **ubuntu-latest**: Ubuntu 22.04
 - **windows-latest**: Windows Server 2022
 - **macos-latest**: macOS 12
 
 ### Self-hosted Runners
+
 ```yaml
 jobs:
   build:
@@ -116,37 +126,42 @@ jobs:
 ## 📦 Actions Populares
 
 ### Checkout
+
 ```yaml
 - uses: actions/checkout@v3
   with:
-    fetch-depth: 0  # Fetch all history
+    fetch-depth: 0 # Fetch all history
 ```
 
 ### Setup Node.js
+
 ```yaml
 - uses: actions/setup-node@v3
   with:
-    node-version: '18'
-    cache: 'npm'
+    node-version: "18"
+    cache: "npm"
 ```
 
 ### Setup Python
+
 ```yaml
 - uses: actions/setup-python@v4
   with:
-    python-version: '3.11'
-    cache: 'pip'
+    python-version: "3.11"
+    cache: "pip"
 ```
 
 ### Setup Java
+
 ```yaml
 - uses: actions/setup-java@v3
   with:
-    java-version: '17'
-    distribution: 'temurin'
+    java-version: "17"
+    distribution: "temurin"
 ```
 
 ### Docker
+
 ```yaml
 - name: Build Docker image
   uses: docker/build-push-action@v4
@@ -159,6 +174,7 @@ jobs:
 ## 🔐 Secrets e Variáveis
 
 ### Secrets
+
 ```yaml
 - name: Deploy
   run: |
@@ -167,6 +183,7 @@ jobs:
 ```
 
 ### Variáveis de Ambiente
+
 ```yaml
 env:
   NODE_ENV: production
@@ -174,6 +191,7 @@ env:
 ```
 
 ### Variáveis do Contexto
+
 ```yaml
 - name: Show context
   run: |
@@ -186,6 +204,7 @@ env:
 ## 🏗️ Jobs e Matrizes
 
 ### Job Simples
+
 ```yaml
 jobs:
   test:
@@ -196,6 +215,7 @@ jobs:
 ```
 
 ### Matriz de Builds
+
 ```yaml
 jobs:
   test:
@@ -213,19 +233,20 @@ jobs:
 ```
 
 ### Jobs Dependentes
+
 ```yaml
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - run: npm test
-      
+
   build:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - run: npm run build
-      
+
   deploy:
     needs: [test, build]
     runs-on: ubuntu-latest
@@ -236,76 +257,79 @@ jobs:
 ## 🚀 Deploy com GitHub Actions
 
 ### Deploy para Vercel
+
 ```yaml
 name: Deploy to Vercel
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
-          vercel-args: '--prod'
+          vercel-args: "--prod"
 ```
 
 ### Deploy para AWS S3
+
 ```yaml
 name: Deploy to S3
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Deploy to S3
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-          
+
       - name: Upload to S3
         run: aws s3 sync dist/ s3://${{ secrets.S3_BUCKET }} --delete
 ```
 
 ### Deploy para Docker Hub
+
 ```yaml
 name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
@@ -319,11 +343,13 @@ jobs:
 ## 🔒 Segurança
 
 ### Secrets
+
 - Nunca commite secrets no código
 - Use GitHub Secrets para dados sensíveis
 - Rotacione secrets regularmente
 
 ### Permissões
+
 ```yaml
 permissions:
   contents: read
@@ -333,6 +359,7 @@ permissions:
 ```
 
 ### GITHUB_TOKEN
+
 ```yaml
 - name: Create Release
   uses: actions/create-release@v1
@@ -343,16 +370,18 @@ permissions:
 ## 📊 Notificações
 
 ### Slack
+
 ```yaml
 - name: Notify Slack
   uses: 8398a7/action-slack@v3
   with:
     status: ${{ job.status }}
-    channel: '#deployments'
+    channel: "#deployments"
     webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 ```
 
 ### Email
+
 ```yaml
 - name: Send Email
   uses: dawidd6/action-send-mail@v3
@@ -361,15 +390,16 @@ permissions:
     server_port: 587
     username: ${{ secrets.EMAIL_USERNAME }}
     password: ${{ secrets.EMAIL_PASSWORD }}
-    subject: 'Deploy completed'
+    subject: "Deploy completed"
     to: ${{ github.actor }}@example.com
     from: GitHub Actions
-    body: 'Deploy completed successfully!'
+    body: "Deploy completed successfully!"
 ```
 
 ## 🛠️ Boas Práticas
 
 ### 1. Use Actions Oficiais
+
 ```yaml
 # ✅ Bom
 - uses: actions/checkout@v3
@@ -379,6 +409,7 @@ permissions:
 ```
 
 ### 2. Fixe Versões
+
 ```yaml
 # ✅ Bom
 - uses: actions/checkout@v3.1.0
@@ -388,6 +419,7 @@ permissions:
 ```
 
 ### 3. Use Cache
+
 ```yaml
 - name: Cache dependencies
   uses: actions/cache@v3
@@ -397,6 +429,7 @@ permissions:
 ```
 
 ### 4. Fail Fast
+
 ```yaml
 - name: Lint
   run: npm run lint
@@ -404,6 +437,7 @@ permissions:
 ```
 
 ### 5. Cleanup
+
 ```yaml
 - name: Cleanup
   if: always()
@@ -415,6 +449,7 @@ permissions:
 ## 🐛 Troubleshooting
 
 ### Debug
+
 ```yaml
 - name: Debug
   run: |
@@ -425,6 +460,7 @@ permissions:
 ```
 
 ### Logs
+
 ```yaml
 - name: Show logs
   run: |
@@ -433,6 +469,7 @@ permissions:
 ```
 
 ### Artifacts
+
 ```yaml
 - name: Upload artifacts
   uses: actions/upload-artifact@v3
@@ -448,84 +485,84 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: "18"
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Run linting
-      run: npm run lint
-      
-    - name: Run tests
-      run: npm test
-      
-    - name: Run security audit
-      run: npm audit --audit-level moderate
-      
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run security audit
+        run: npm audit --audit-level moderate
+
   build:
     needs: test
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Build
-      run: npm run build
-      
-    - name: Build Docker image
-      run: docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
-      
-    - name: Login to Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: Push Docker image
-      run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-      
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Build Docker image
+        run: docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} .
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+
   deploy:
     needs: [test, build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
-    - name: Deploy to production
-      run: |
-        echo "Deploying to production..."
-        # Deploy logic here
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+          # Deploy logic here
 ```
 
 ---
